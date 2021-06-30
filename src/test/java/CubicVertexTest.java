@@ -97,4 +97,16 @@ public class CubicVertexTest {
 
     }
 
+    @Test
+    @DisplayName("Ensure that toString() method works correctly")
+    public void testToString() {
+        Vertex first = new CubicVertex(1);
+        Vertex second = new CubicVertex(2);
+
+        Assertions.assertEquals("1", first.toString());
+        Assertions.assertEquals("2", second.toString());
+
+    }
+
+
 }

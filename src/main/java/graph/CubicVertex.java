@@ -37,7 +37,7 @@ public class CubicVertex implements Vertex {
         this.NUMBER = number;
         this.LOGGER = Logger.getLogger(this.getClass().getName());
         this.NEIGHBORS = new ArrayList<>(3);
-        LOGGER.info("New CubicVertex number " + this.NUMBER + " created");
+        LOGGER.info("CubicVertex " + this + " created");
     }
 
     /**
@@ -45,7 +45,7 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public int getNumber() {
-        LOGGER.finest("The number of the vertex number " + this.NUMBER + " accessed");
+        LOGGER.finest("The number of the CubicVertex " + this + " accessed");
         return this.NUMBER;
     }
 
@@ -57,18 +57,18 @@ public class CubicVertex implements Vertex {
     @Override
     public void addNeighbor(Vertex neighbor) throws InconsistentGraphException {
         if (this.NEIGHBORS.size() >= 3) {
-            LOGGER.warning("Inconsistent state of a CubicVertex number " + this.getNumber() +
+            LOGGER.warning("Inconsistent state of a CubicVertex " + this +
                     " -> number of neighbors = " + this.NEIGHBORS.size());
             throw new InconsistentGraphException();
         }
         if (this.NEIGHBORS.contains(neighbor)) {
-            LOGGER.warning("Inconsistent state of a CubicVertex number " + this.getNumber() +
+            LOGGER.warning("Inconsistent state of a CubicVertex " + this +
                     " -> vertex number " + neighbor.getNumber() + " already in array");
             throw new InconsistentGraphException();
         }
         this.NEIGHBORS.add(neighbor);
-        LOGGER.info("A new neighbor of CubicVertex number " + this.NUMBER + " with number "
-                + neighbor.getNumber() + " added");
+        LOGGER.info("A new neighbor of CubicVertex " + this + " with number "
+                + neighbor + " added");
     }
 
     /**
