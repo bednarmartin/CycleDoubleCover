@@ -16,7 +16,7 @@ public class CubicVertex implements Vertex {
     /**
      * Logger of the class
      */
-    private final Logger LOGGER;
+    private static final Logger LOGGER = Logger.getLogger(CubicVertex.class.getName());
 
     /**
      * The number of the vertex
@@ -35,7 +35,6 @@ public class CubicVertex implements Vertex {
      */
     public CubicVertex(int number) {
         this.NUMBER = number;
-        this.LOGGER = Logger.getLogger(this.getClass().getName());
         this.NEIGHBORS = new ArrayList<>(3);
         LOGGER.info("CubicVertex " + this + " created");
     }
@@ -45,7 +44,7 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public int getNumber() {
-        LOGGER.finest("The number of the CubicVertex " + this + " accessed");
+        LOGGER.finest("The number of the CubicVertex " + this + " returned");
         return this.NUMBER;
     }
 
@@ -63,7 +62,7 @@ public class CubicVertex implements Vertex {
         }
         if (this.NEIGHBORS.contains(neighbor)) {
             LOGGER.warning("Inconsistent state of a CubicVertex " + this +
-                    " -> vertex number " + neighbor.getNumber() + " already in array");
+                    " -> vertex number " + neighbor.getNumber() + " already in a list");
             throw new InconsistentGraphException();
         }
         this.NEIGHBORS.add(neighbor);
@@ -76,6 +75,7 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public List<Vertex> getNeighbors() {
+        LOGGER.finest("Neighbors of the CubicVertex " + this + " returned");
         return this.NEIGHBORS;
     }
 

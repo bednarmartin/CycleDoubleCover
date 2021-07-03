@@ -4,6 +4,7 @@ import main.java.exceptions.InconsistentGraphException;
 import main.java.graph.CubicEdge;
 import main.java.graph.CubicVertex;
 import main.java.graph.Edge;
+import main.java.graph.Vertex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,14 +18,30 @@ public class CubicEdgeTest {
     @Test
     @DisplayName("Ensure the constructor of the CubicEdge works correctly")
     public void testEdge() {
-        Assertions.assertDoesNotThrow(() -> new CubicEdge(new CubicVertex(1), new CubicVertex(2)));
-        Assertions.assertDoesNotThrow(() -> new CubicEdge(new CubicVertex(4), new CubicVertex(6)));
-        Assertions.assertDoesNotThrow(() -> new CubicEdge(new CubicVertex(5), new CubicVertex(3)));
+        Vertex first = new CubicVertex(1);
+        Vertex second = new CubicVertex(2);
+        Vertex third = new CubicVertex(3);
+        try {
+            first.addNeighbor(second);
+            second.addNeighbor(first);
 
-        Assertions.assertThrows(InconsistentGraphException.class, () -> new CubicEdge(new CubicVertex(5), new CubicVertex(5)));
-        Assertions.assertThrows(InconsistentGraphException.class, () -> new CubicEdge(new CubicVertex(1), new CubicVertex(1)));
-        Assertions.assertThrows(InconsistentGraphException.class, () -> new CubicEdge(new CubicVertex(2), new CubicVertex(2)));
+            first.addNeighbor(third);
 
+        } catch (InconsistentGraphException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertDoesNotThrow(() -> new CubicEdge(first, second));
+        Assertions.assertDoesNotThrow(() -> new CubicEdge(first, third));
+        Assertions.assertDoesNotThrow(() -> new CubicEdge(second, third));
+
+        Assertions.assertThrows(InconsistentGraphException.class, () -> new CubicEdge(first, first));
+
+    }
+
+    @Test
+    @DisplayName("Ensure the equals() and hashcode() methods work correctly")
+    public void testEqualsEdge() {
         try {
             Edge first = new CubicEdge(new CubicVertex(1), new CubicVertex(2));
             Edge second = new CubicEdge(new CubicVertex(3), new CubicVertex(4));
@@ -41,12 +58,9 @@ public class CubicEdgeTest {
 
             Set<Edge> setOfEdges = new HashSet<>(Arrays.asList(first, second, third, fourth, fifth, sixth));
 
-            Assertions.assertTrue(setOfEdges.contains(first));
-            Assertions.assertTrue(setOfEdges.contains(second));
-            Assertions.assertTrue(setOfEdges.contains(third));
-            Assertions.assertTrue(setOfEdges.contains(fourth));
-            Assertions.assertTrue(setOfEdges.contains(fifth));
-            Assertions.assertTrue(setOfEdges.contains(sixth));
+            for (Edge edge : Arrays.asList(first, second, third, fourth, fifth, sixth)) {
+                Assertions.assertTrue(setOfEdges.contains(edge));
+            }
 
             Assertions.assertTrue(setOfEdges.contains(new CubicEdge(new CubicVertex(1), new CubicVertex(2))));
             Assertions.assertTrue(setOfEdges.contains(new CubicEdge(new CubicVertex(3), new CubicVertex(2))));

@@ -33,12 +33,9 @@ public class CubicVertexTest {
 
         Set<Vertex> setOfVertices = new HashSet<>(Arrays.asList(first, second, third, fourth, fifth, sixth));
 
-        Assertions.assertTrue(setOfVertices.contains(first));
-        Assertions.assertTrue(setOfVertices.contains(second));
-        Assertions.assertTrue(setOfVertices.contains(third));
-        Assertions.assertTrue(setOfVertices.contains(fourth));
-        Assertions.assertTrue(setOfVertices.contains(fifth));
-        Assertions.assertTrue(setOfVertices.contains(sixth));
+        for (Vertex vertex : Arrays.asList(first, second, third, fourth, fifth, sixth)) {
+            Assertions.assertTrue(setOfVertices.contains(vertex));
+        }
 
         Assertions.assertTrue(setOfVertices.contains(new CubicVertex(1)));
         Assertions.assertTrue(setOfVertices.contains(new CubicVertex(2)));

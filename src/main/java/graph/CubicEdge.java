@@ -12,7 +12,7 @@ public class CubicEdge implements Edge {
     /**
      * Logger of the class
      */
-    private final Logger LOGGER;
+    private static final Logger LOGGER = Logger.getLogger(CubicEdge.class.getName());
     /**
      * The first vertex of the edge
      */
@@ -29,14 +29,19 @@ public class CubicEdge implements Edge {
      * @param second the second vertex of the edge
      */
     public CubicEdge(Vertex first, Vertex second) throws InconsistentGraphException {
-        this.LOGGER = Logger.getLogger(this.getClass().getName());
         if (first.equals(second)) {
-            this.LOGGER.warning("CubicEdge [" + first + " " + second + "] was supposed to be created");
+            LOGGER.warning("CubicEdge [" + first + " " + second + "] was supposed to be created");
             throw new InconsistentGraphException();
+        }
+        if (!first.getNeighbors().contains(second)) {
+            first.addNeighbor(second);
+        }
+        if (!second.getNeighbors().contains(first)) {
+            second.addNeighbor(first);
         }
         this.FIRST = first;
         this.SECOND = second;
-        this.LOGGER.info("CubicEdge object " + this + " created");
+        LOGGER.info("CubicEdge object " + this + " created");
     }
 
     /**
@@ -44,7 +49,7 @@ public class CubicEdge implements Edge {
      */
     @Override
     public Vertex getFirst() {
-        this.LOGGER.finest("CubicEdge " + this + " -> first vertex " + this.FIRST + " accesed");
+        LOGGER.finest("CubicEdge " + this + " -> first vertex " + this.FIRST + " returned");
         return this.FIRST;
     }
 
@@ -53,7 +58,7 @@ public class CubicEdge implements Edge {
      */
     @Override
     public Vertex getSecond() {
-        this.LOGGER.finest("CubicEdge " + this + " -> second vertex " + this.SECOND + " accesed");
+        LOGGER.finest("CubicEdge " + this + " -> second vertex " + this.SECOND + " returned");
         return this.SECOND;
     }
 
