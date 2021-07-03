@@ -1,5 +1,7 @@
 package main.java.graph;
 
+import main.java.determiners.BridgeDeterminer;
+import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.exceptions.InconsistentGraphException;
 
 import java.util.ArrayList;
@@ -121,8 +123,8 @@ public class CubicGraph implements Graph {
      * @return True if the graph has a bridge
      */
     @Override
-    public boolean hasBridge() {
-        throw new UnsupportedOperationException();
+    public boolean hasBridge(BridgeDeterminer determiner) {
+        return determiner.hasBridge(this);
     }
 
     /**
@@ -145,8 +147,8 @@ public class CubicGraph implements Graph {
      * @return True if the graph is connected
      */
     @Override
-    public boolean isConnected() {
-        throw new UnsupportedOperationException();
+    public boolean isConnected(ConnectedGraphDeterminer determiner) {
+        return determiner.isConnected(this);
     }
 
     /**

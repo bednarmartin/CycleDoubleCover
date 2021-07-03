@@ -1,5 +1,7 @@
 package main.java.graph;
 
+import main.java.determiners.BridgeDeterminer;
+import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.exceptions.InconsistentGraphException;
 
 import java.util.List;
@@ -16,13 +18,13 @@ public interface Graph {
 
     void addEdge(Edge edge) throws InconsistentGraphException;
 
-    boolean hasBridge();
+    boolean hasBridge(BridgeDeterminer determiner);
 
     boolean hasThreeCut();
 
     boolean hasTwoCut();
 
-    boolean isConnected();
+    boolean isConnected(ConnectedGraphDeterminer determiner);
 
     List<List<Edge>> getAllTwoCuts();
 

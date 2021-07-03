@@ -16,14 +16,29 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
      */
     private static final Logger LOGGER = Logger.getLogger(AdjacentFormatGraphIterator.class.getName());
 
+    /**
+     * Number of graphs to be read
+     */
     private final int NUMBER_OF_GRAPHS;
-
+    /**
+     * Number of vertices of the graphs to be read
+     */
     private final int NUMBER_OF_VERTICES;
-
+    /**
+     * How many graphs were read
+     */
     private int counter;
-
+    /**
+     * Buffered Reader for reading
+     */
     private final BufferedReader BUFFERED_READER;
 
+    /**
+     * Constructor of the class AdjacentFormatGraphIterator
+     *
+     * @param path path of the file to read from
+     * @throws IOException - wrong format of the graphs
+     */
     public AdjacentFormatGraphIterator(String path) throws IOException {
         this.BUFFERED_READER = new BufferedReader(new FileReader(path));
         int numberOfLines;
@@ -43,12 +58,17 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
         this.counter = 0;
     }
 
-
+    /**
+     * @return True if there is a graph to be read
+     */
     @Override
     public boolean hasNext() {
         return counter < getNumberOfGraphs();
     }
 
+    /**
+     * @return Graph object read from the file
+     */
     @Override
     public Graph next() {
         Graph graph = new CubicGraph();
@@ -76,11 +96,17 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
         return graph;
     }
 
+    /**
+     * @return number of graphs in the file
+     */
     @Override
     public int getNumberOfGraphs() {
         return NUMBER_OF_GRAPHS;
     }
 
+    /**
+     * @return number of vertices of the graphs in the file
+     */
     @Override
     public int getNumberOfVertices() {
         return NUMBER_OF_VERTICES;

@@ -1,10 +1,15 @@
 package test.java;
 
+import main.java.determiners.BridgeDeterminer;
+import main.java.determiners.DFSConnectedGraphDeterminer;
+import main.java.determiners.DFSBridgeDeterminer;
 import main.java.exceptions.InconsistentGraphException;
 import main.java.graph.CubicEdge;
 import main.java.graph.CubicGraph;
 import main.java.graph.CubicVertex;
 import main.java.graph.Graph;
+import main.java.reading.AdjacentFormatGraphIterator;
+import main.java.reading.GraphIterator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,6 +82,71 @@ public class CubicGraphTest {
         Assertions.assertThrows(InconsistentGraphException.class,
                 () -> graph.addEdge(new CubicEdge(new CubicVertex(25), new CubicVertex(20))));
 
+    }
+
+    @Test
+    @DisplayName("Ensure isConnected() method works correctly")
+    public void testIsConnected() {
+        try {
+            DFSConnectedGraphDeterminer DFSConnectedGraphDeterminer = new DFSConnectedGraphDeterminer();
+
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/8g3e.txt");
+
+            while (graphIterator.hasNext()) {
+                Assertions.assertTrue(graphIterator.next().isConnected(DFSConnectedGraphDeterminer));
+            }
+
+            GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/disconnected_8.txt");
+
+            while (graphIterator2.hasNext()) {
+                Assertions.assertFalse(graphIterator2.next().isConnected(DFSConnectedGraphDeterminer));
+            }
+
+            Graph disconnectedGraph = new CubicGraph();
+            disconnectedGraph.addVertex(new CubicVertex(1));
+            disconnectedGraph.addVertex(new CubicVertex(2));
+            disconnectedGraph.addVertex(new CubicVertex(3));
+            disconnectedGraph.addVertex(new CubicVertex(4));
+            disconnectedGraph.addVertex(new CubicVertex(5));
+            disconnectedGraph.addEdge(new CubicEdge(new CubicVertex(1), new CubicVertex(2)));
+            disconnectedGraph.addEdge(new CubicEdge(new CubicVertex(2), new CubicVertex(3)));
+            disconnectedGraph.addEdge(new CubicEdge(new CubicVertex(4), new CubicVertex(5)));
+
+            Assertions.assertFalse(disconnectedGraph.isConnected(DFSConnectedGraphDeterminer));
+
+        } catch (Exception e) {
+            Assertions.fail();
+        }
+
+    }
+
+    @Test
+    @DisplayName("Ensure hasBridge() method works correctly")
+    public void testHasBridge() {
+        BridgeDeterminer bridgeDeterminer = new DFSBridgeDeterminer();
+        try {
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/bridge_10.txt");
+            while (graphIterator.hasNext()) {
+                Graph graph = graphIterator.next();
+                Assertions.assertTrue(graph.hasBridge(bridgeDeterminer));
+            }
+
+            GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/12g3e.txt");
+            int counter = 0;
+            while (graphIterator2.hasNext()) {
+                Graph graph = graphIterator2.next();
+                if (counter < 4) {
+                    Assertions.assertTrue(graph.hasBridge(bridgeDeterminer));
+                } else {
+                    Assertions.assertFalse(graph.hasBridge(bridgeDeterminer));
+                }
+                counter++;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assertions.fail();
+        }
 
     }
 }

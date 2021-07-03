@@ -6,7 +6,10 @@ import main.java.graph.Vertex;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CubicConnectedGraphDeterminer implements ConnectedGraphDeterminer {
+/**
+ * Class representing an algorithm for determining whether the graph is connected using DFS
+ */
+public class DFSConnectedGraphDeterminer implements ConnectedGraphDeterminer {
     /**
      * @param graph graph to be checked
      * @return True if the graph si connected
