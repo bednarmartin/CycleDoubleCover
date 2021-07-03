@@ -3,6 +3,7 @@ package main.java.graph;
 import main.java.determiners.BridgeDeterminer;
 import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.exceptions.InconsistentGraphException;
+import main.java.finders.TwoCutFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,22 +129,6 @@ public class CubicGraph implements Graph {
     }
 
     /**
-     * @return True if the graph has a 2-cut
-     */
-    @Override
-    public boolean hasThreeCut() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @return True if the graph has a 3-cut
-     */
-    @Override
-    public boolean hasTwoCut() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * @return True if the graph is connected
      */
     @Override
@@ -155,8 +140,8 @@ public class CubicGraph implements Graph {
      * @return Set of all 2-cuts of the graph
      */
     @Override
-    public List<List<Edge>> getAllTwoCuts() {
-        return null;
+    public List<List<Edge>> getAllTwoCuts(TwoCutFinder twoCutFinder) {
+        return twoCutFinder.getTwoCuts(this);
     }
 
     /**

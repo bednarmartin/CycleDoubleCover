@@ -3,6 +3,7 @@ package main.java.graph;
 import main.java.determiners.BridgeDeterminer;
 import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.exceptions.InconsistentGraphException;
+import main.java.finders.TwoCutFinder;
 
 import java.util.List;
 
@@ -20,13 +21,9 @@ public interface Graph {
 
     boolean hasBridge(BridgeDeterminer determiner);
 
-    boolean hasThreeCut();
-
-    boolean hasTwoCut();
-
     boolean isConnected(ConnectedGraphDeterminer determiner);
 
-    List<List<Edge>> getAllTwoCuts();
+    List<List<Edge>> getAllTwoCuts(TwoCutFinder twoCutFinder);
 
     List<List<Edge>> getAllThreeCuts();
 

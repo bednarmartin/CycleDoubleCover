@@ -4,6 +4,8 @@ import main.java.determiners.BridgeDeterminer;
 import main.java.determiners.DFSConnectedGraphDeterminer;
 import main.java.determiners.DFSBridgeDeterminer;
 import main.java.exceptions.InconsistentGraphException;
+import main.java.finders.CombinationTwoCutFinder;
+import main.java.finders.TwoCutFinder;
 import main.java.graph.CubicEdge;
 import main.java.graph.CubicGraph;
 import main.java.graph.CubicVertex;
@@ -13,6 +15,7 @@ import main.java.reading.GraphIterator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 
 public class CubicGraphTest {
 
@@ -148,5 +151,38 @@ public class CubicGraphTest {
             Assertions.fail();
         }
 
+    }
+
+    @Test
+    @DisplayName("Ensure getAllTwoCuts() method works correctly")
+    public void testGetAllTwoCuts() {
+        TwoCutFinder twoCutFinder = new CombinationTwoCutFinder(new DFSConnectedGraphDeterminer());
+        try {
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/8g3e.txt");
+            int counter = 0;
+            while (graphIterator.hasNext()) {
+                Graph graph = graphIterator.next();
+                if (counter == 0) {
+                    Assertions.assertTrue(graph.getAllTwoCuts(twoCutFinder).size() != 0);
+                } else {
+                    Assertions.assertEquals(0, graph.getAllTwoCuts(twoCutFinder).size());
+                }
+                counter++;
+            }
+
+            GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/10g3e.txt");
+            counter = 0;
+            while (graphIterator2.hasNext()) {
+                Graph graph = graphIterator2.next();
+                if (counter < 5) {
+                    Assertions.assertTrue(graph.getAllTwoCuts(twoCutFinder).size() != 0);
+                } else {
+                    Assertions.assertEquals(0, graph.getAllTwoCuts(twoCutFinder).size());
+                }
+                counter++;
+            }
+        } catch (Exception e) {
+            Assertions.fail();
+        }
     }
 }
