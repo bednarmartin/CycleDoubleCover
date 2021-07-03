@@ -3,9 +3,7 @@ package main.java.graph;
 import main.java.exceptions.InconsistentGraphException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -21,16 +19,40 @@ public class CubicGraph implements Graph {
      */
     private final List<Vertex> VERTICES;
     /**
-     * Set containing all the edges of the graph
+     * List containing all the edges of the graph
      */
-    private final Set<Edge> EDGES;
+    private final List<Edge> EDGES;
+    /**
+     * Whether the graph has a bridge
+     */
+    private boolean hasBridge;
+    /**
+     * Whether the graph has a 2-cut
+     */
+    private boolean hasTwoCut;
+    /**
+     * Whether the graph has a 3-cut
+     */
+    private boolean hasThreeCut;
+    /**
+     * Whether the graph is connected
+     */
+    private boolean isConnected;
+    /**
+     * 2-cuts of the graph
+     */
+    private List<List<Edge>> twoCuts;
+    /**
+     * 3-cuts of the graph
+     */
+    private List<List<Edge>> threeCuts;
 
     /**
      * Constructor of the CubicGraph class
      */
     public CubicGraph() {
         this.VERTICES = new ArrayList<>();
-        this.EDGES = new HashSet<>();
+        this.EDGES = new ArrayList<>();
         LOGGER.finest("New CubicGraph object created");
     }
 
@@ -53,10 +75,10 @@ public class CubicGraph implements Graph {
     }
 
     /**
-     * @return Set of edges of the graph
+     * @return List of edges of the graph
      */
     @Override
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         LOGGER.finest("Edges + " + this.EDGES + " returned");
         return this.EDGES;
     }
@@ -95,6 +117,53 @@ public class CubicGraph implements Graph {
         LOGGER.info("Edge " + edge + " added");
     }
 
+    /**
+     * @return True if the graph has a bridge
+     */
+    @Override
+    public boolean hasBridge() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return True if the graph has a 2-cut
+     */
+    @Override
+    public boolean hasThreeCut() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return True if the graph has a 3-cut
+     */
+    @Override
+    public boolean hasTwoCut() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return True if the graph is connected
+     */
+    @Override
+    public boolean isConnected() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return Set of all 2-cuts of the graph
+     */
+    @Override
+    public List<List<Edge>> getAllTwoCuts() {
+        return null;
+    }
+
+    /**
+     * @return Set of all 3-cuts of the graph
+     */
+    @Override
+    public List<List<Edge>> getAllThreeCuts() {
+        return null;
+    }
 
     @Override
     public String toString() {

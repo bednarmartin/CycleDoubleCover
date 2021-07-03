@@ -3,7 +3,6 @@ package main.java.graph;
 import main.java.exceptions.InconsistentGraphException;
 
 import java.util.List;
-import java.util.Set;
 
 public interface Graph {
 
@@ -11,11 +10,23 @@ public interface Graph {
 
     List<Vertex> getVertices();
 
-    Set<Edge> getEdges();
+    List<Edge> getEdges();
 
     void addVertex(Vertex vertex) throws InconsistentGraphException;
 
     void addEdge(Edge edge) throws InconsistentGraphException;
+
+    boolean hasBridge();
+
+    boolean hasThreeCut();
+
+    boolean hasTwoCut();
+
+    boolean isConnected();
+
+    List<List<Edge>> getAllTwoCuts();
+
+    List<List<Edge>> getAllThreeCuts();
 
 
 }
