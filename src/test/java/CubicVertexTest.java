@@ -13,7 +13,6 @@ import java.util.Set;
 
 public class CubicVertexTest {
 
-
     @Test
     @DisplayName("Ensure the number of CubicVertex object works correctly")
     public void testNumber() {

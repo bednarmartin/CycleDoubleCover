@@ -12,4 +12,10 @@ public interface Vertex {
 
     List<Vertex> getNeighbors();
 
+    void addCircuit(Circuit circuit);
+
+    void clearCircuits();
+
+    List<Circuit> getCircuits();
+
 }

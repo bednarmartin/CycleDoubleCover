@@ -3,21 +3,20 @@ package main.java.finders;
 import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.graph.Edge;
 import main.java.graph.Graph;
+import main.java.graph.Vertex;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
- * Class representing an algorithm for finding all 2-cuts in the graph by checking all possible combinations
+ * Class representing an algorithm for finding all 3-cuts in the graph by checking all possible combinations
  */
-public class CombinationTwoCutFinder implements TwoCutFinder {
+public class CombinationThreeCutFinder implements ThreeCutFinder {
     /**
      * Algorithm for checking connectivity of the graph
      */
     private final ConnectedGraphDeterminer connectedGraphDeterminer;
     /**
-     * List of 2-cut edges
+     * List of 3-cut edges
      */
     private List<List<Edge>> cutEdges;
     /**
@@ -30,30 +29,30 @@ public class CombinationTwoCutFinder implements TwoCutFinder {
     private Graph graph;
 
     /**
-     * Constructor for the CombinationTwoCutFinder class
+     * Constructor for the CombinationThreeCutFinder class
      *
      * @param connectedGraphDeterminer algorithm for checking connectivity of the graph
      */
-    public CombinationTwoCutFinder(ConnectedGraphDeterminer connectedGraphDeterminer) {
+    public CombinationThreeCutFinder(ConnectedGraphDeterminer connectedGraphDeterminer) {
         this.connectedGraphDeterminer = connectedGraphDeterminer;
     }
 
     /**
-     * @return List of 2-cut edges
+     * @return List of 3-cut edges
      */
     @Override
-    public List<List<Edge>> getTwoCuts(Graph graph) {
+    public List<List<Edge>> getThreeCuts(Graph graph) {
         this.cutEdges = new ArrayList<>();
         this.graph = graph;
         this.graphEdges = new ArrayList<>(graph.getEdges());
-        var array = new Edge[2];
-        processAllCombinations(array, 0, graphEdges.size() - 1, 0, 2);
+        var array = new Edge[3];
+        processAllCombinations(array, 0, graphEdges.size() - 1, 0, 3);
         return cutEdges;
     }
 
     /**
-     * @param edgesToCheck List of 2 edges to check whether they are 2-cut edges
-     * @return true if the edges are 2-cut edges
+     * @param edgesToCheck List of 3 edges to check whether they are 3-cut edges
+     * @return true if the edges are 3-cut edges
      */
     @SuppressWarnings("Duplicates")
     private boolean isCut(List<Edge> edgesToCheck) {
@@ -70,9 +69,9 @@ public class CombinationTwoCutFinder implements TwoCutFinder {
     }
 
     /**
-     * Process all possible combination of 2 edges in order to find all the 2-cut of the graph
+     * Process all possible combination of 3 edges in order to find all the 3-cut of the graph
      *
-     * @param data  actual 2 edges to be processed
+     * @param data  actual 3 edges to be processed
      * @param start start point
      * @param end   end point
      * @param index actual index
@@ -81,6 +80,14 @@ public class CombinationTwoCutFinder implements TwoCutFinder {
     private void processAllCombinations(Edge[] data, int start, int end, int index, int size) {
         if (index == size) {
             List<Edge> toCheck = new ArrayList<>(Arrays.asList(data));
+            Set<Vertex> edgeVertices = new HashSet<>();
+            for (Edge edge : toCheck) {
+                edgeVertices.add(edge.getFirst());
+                edgeVertices.add(edge.getSecond());
+            }
+            if (edgeVertices.size() == 4) {
+                return;
+            }
             if (isCut(toCheck)) {
                 cutEdges.add(toCheck);
             }

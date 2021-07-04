@@ -19,21 +19,20 @@ public class DFSBridgeDeterminer implements BridgeDeterminer {
     @Override
     public boolean hasBridge(Graph graph) {
         int numberOfVertices = graph.getNumberOfVertices();
-        boolean[] visited = new boolean[numberOfVertices];
-        int[] distance = new int[numberOfVertices];
-        int[] low = new int[numberOfVertices];
-        Vertex[] parent = new Vertex[numberOfVertices];
-        for (int i = 0; i < numberOfVertices; i++) {
+        var visited = new boolean[numberOfVertices];
+        var distance = new int[numberOfVertices];
+        var low = new int[numberOfVertices];
+        var parent = new Vertex[numberOfVertices];
+        for (var i = 0; i < numberOfVertices; i++) {
             parent[i] = null;
             visited[i] = false;
         }
-        for (int i = 0; i < numberOfVertices; i++) {
-            if (!visited[i]) {
-                if (DFS(graph.getVertices().get(i), visited, distance, low, parent)) {
-                    return true;
-                }
+        for (var i = 0; i < numberOfVertices; i++) {
+            if (!visited[i] && dfs(graph.getVertices().get(i), visited, distance, low, parent)) {
+                return true;
             }
         }
+
         return false;
     }
 
@@ -47,13 +46,13 @@ public class DFSBridgeDeterminer implements BridgeDeterminer {
      * @param parent   array indicating parents of the vertices
      * @return true if there exists a bridge
      */
-    private boolean DFS(Vertex vertex, boolean[] visited, int[] distance, int[] low, Vertex[] parent) {
+    private boolean dfs(Vertex vertex, boolean[] visited, int[] distance, int[] low, Vertex[] parent) {
         visited[vertex.getNumber()] = true;
         distance[vertex.getNumber()] = low[vertex.getNumber()] = ++counter;
         for (Vertex neighbor : vertex.getNeighbors()) {
             if (!visited[neighbor.getNumber()]) {
                 parent[neighbor.getNumber()] = vertex;
-                DFS(neighbor, visited, distance, low, parent);
+                dfs(neighbor, visited, distance, low, parent);
                 low[vertex.getNumber()] = Math.min(low[vertex.getNumber()], low[neighbor.getNumber()]);
                 if (low[neighbor.getNumber()] > distance[vertex.getNumber()]) {
                     return true;

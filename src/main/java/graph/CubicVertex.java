@@ -4,7 +4,6 @@ import main.java.exceptions.InconsistentGraphException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 
 /**
@@ -12,21 +11,20 @@ import java.util.logging.Logger;
  */
 
 public class CubicVertex implements Vertex {
-
-    /**
-     * Logger of the class
-     */
-    private static final Logger LOGGER = Logger.getLogger(CubicVertex.class.getName());
-
     /**
      * The number of the vertex
      */
-    private final int NUMBER;
+    private final int number;
 
     /**
      * List of the adjacent vertices
      */
-    private final List<Vertex> NEIGHBORS;
+    private final List<Vertex> neighbors;
+
+    /**
+     * List of circuits belonging to the vertex
+     */
+    private final List<Circuit> circuits;
 
     /**
      * Constructor of the class CubicVertex
@@ -34,9 +32,9 @@ public class CubicVertex implements Vertex {
      * @param number number of the vertex
      */
     public CubicVertex(int number) {
-        this.NUMBER = number;
-        this.NEIGHBORS = new ArrayList<>(3);
-        LOGGER.info("CubicVertex " + this + " created");
+        this.number = number;
+        this.neighbors = new ArrayList<>(3);
+        this.circuits = new ArrayList<>();
     }
 
     /**
@@ -44,8 +42,7 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public int getNumber() {
-        LOGGER.finest("The number of the CubicVertex " + this + " returned");
-        return this.NUMBER;
+        return this.number;
     }
 
     /**
@@ -55,19 +52,13 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public void addNeighbor(Vertex neighbor) throws InconsistentGraphException {
-        if (this.NEIGHBORS.size() >= 3) {
-            LOGGER.warning("Inconsistent state of a CubicVertex " + this +
-                    " -> number of neighbors = " + this.NEIGHBORS.size());
+        if (this.neighbors.size() >= 3) {
             throw new InconsistentGraphException();
         }
-        if (this.NEIGHBORS.contains(neighbor)) {
-            LOGGER.warning("Inconsistent state of a CubicVertex " + this +
-                    " -> vertex number " + neighbor.getNumber() + " already in a list");
+        if (this.neighbors.contains(neighbor)) {
             throw new InconsistentGraphException();
         }
-        this.NEIGHBORS.add(neighbor);
-        LOGGER.info("A new neighbor of CubicVertex " + this + " with number "
-                + neighbor + " added");
+        this.neighbors.add(neighbor);
     }
 
     /**
@@ -75,18 +66,45 @@ public class CubicVertex implements Vertex {
      */
     @Override
     public List<Vertex> getNeighbors() {
-        LOGGER.finest("Neighbors of the CubicVertex " + this + " returned");
-        return this.NEIGHBORS;
+        return this.neighbors;
+    }
+
+    /**
+     * Adds a circuit to circuits belonging to the vertex
+     *
+     * @param circuit circuit to be added
+     */
+    @Override
+    public void addCircuit(Circuit circuit) {
+        this.circuits.add(circuit);
+
+    }
+
+    /**
+     * Remove all the circuits belonging to the vertex
+     */
+    @Override
+    public void clearCircuits() {
+        this.circuits.clear();
+
+    }
+
+    /**
+     * @return List of circuits belonging to the vertex
+     */
+    @Override
+    public List<Circuit> getCircuits() {
+        return this.circuits;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(this.NUMBER);
+        return String.valueOf(this.number);
     }
 
     @Override
     public int hashCode() {
-        return this.NUMBER;
+        return this.number;
     }
 
     @Override
@@ -100,7 +118,7 @@ public class CubicVertex implements Vertex {
         if (getClass() != objectToCompare.getClass()) {
             return false;
         } else {
-            return ((Vertex) objectToCompare).getNumber() == this.NUMBER;
+            return ((Vertex) objectToCompare).getNumber() == this.number;
         }
     }
 }

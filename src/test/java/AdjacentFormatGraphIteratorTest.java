@@ -1,5 +1,4 @@
 package test.java;
-
 import main.java.graph.*;
 import main.java.reading.AdjacentFormatGraphIterator;
 import main.java.reading.GraphIterator;
@@ -22,9 +21,9 @@ public class AdjacentFormatGraphIteratorTest {
             Assertions.assertEquals(4, graphIterator.getNumberOfVertices());
             Assertions.assertEquals(1, graphIterator.getNumberOfGraphs());
 
-            int counter = 0;
+            var counter = 0;
             while (graphIterator.hasNext()) {
-                Graph graph = graphIterator.next();
+                var graph = graphIterator.next();
                 Assertions.assertEquals(4, graph.getNumberOfVertices());
                 Assertions.assertEquals(6, graph.getEdges().size());
 
@@ -70,10 +69,10 @@ public class AdjacentFormatGraphIteratorTest {
             Assertions.assertEquals(6, graphIterator.getNumberOfVertices());
             Assertions.assertEquals(2, graphIterator.getNumberOfGraphs());
 
-            int counter = 0;
+            var counter = 0;
             List<Graph> graphs = new ArrayList<>();
             while (graphIterator.hasNext()) {
-                Graph graph = graphIterator.next();
+                var graph = graphIterator.next();
                 graphs.add(graph);
                 Assertions.assertEquals(6, graph.getNumberOfVertices());
                 Assertions.assertEquals(9, graph.getEdges().size());
@@ -85,7 +84,7 @@ public class AdjacentFormatGraphIteratorTest {
                 counter++;
             }
             Assertions.assertEquals(2, counter);
-            List<Edge> edges_1 = new ArrayList<>(Arrays.asList(
+            List<Edge> edges1 = new ArrayList<>(Arrays.asList(
                     new CubicEdge(new CubicVertex(0), new CubicVertex(3)),
                     new CubicEdge(new CubicVertex(0), new CubicVertex(4)),
                     new CubicEdge(new CubicVertex(0), new CubicVertex(5)),
@@ -97,7 +96,7 @@ public class AdjacentFormatGraphIteratorTest {
                     new CubicEdge(new CubicVertex(4), new CubicVertex(5))
             ));
 
-            List<Edge> edges_2 = new ArrayList<>(Arrays.asList(
+            List<Edge> edges2 = new ArrayList<>(Arrays.asList(
                     new CubicEdge(new CubicVertex(0), new CubicVertex(2)),
                     new CubicEdge(new CubicVertex(0), new CubicVertex(3)),
                     new CubicEdge(new CubicVertex(0), new CubicVertex(4)),
@@ -109,11 +108,11 @@ public class AdjacentFormatGraphIteratorTest {
                     new CubicEdge(new CubicVertex(4), new CubicVertex(5))
             ));
 
-            for (Edge edge : edges_1) {
+            for (Edge edge : edges1) {
                 Assertions.assertTrue(graphs.get(0).getEdges().contains(edge));
             }
 
-            for (Edge edge : edges_2) {
+            for (Edge edge : edges2) {
                 Assertions.assertTrue(graphs.get(1).getEdges().contains(edge));
             }
         } catch (Exception e) {

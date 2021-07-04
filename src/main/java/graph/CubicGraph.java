@@ -3,60 +3,32 @@ package main.java.graph;
 import main.java.determiners.BridgeDeterminer;
 import main.java.determiners.ConnectedGraphDeterminer;
 import main.java.exceptions.InconsistentGraphException;
+import main.java.finders.CircuitsFinder;
+import main.java.finders.ThreeCutFinder;
 import main.java.finders.TwoCutFinder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Class representing a cubic graph
  */
 public class CubicGraph implements Graph {
     /**
-     * Logger of the class
-     */
-    private static final Logger LOGGER = Logger.getLogger(CubicEdge.class.getName());
-    /**
      * List containing all the vertices of the graph
      */
-    private final List<Vertex> VERTICES;
+    private final List<Vertex> vertices;
     /**
      * List containing all the edges of the graph
      */
-    private final List<Edge> EDGES;
-    /**
-     * Whether the graph has a bridge
-     */
-    private boolean hasBridge;
-    /**
-     * Whether the graph has a 2-cut
-     */
-    private boolean hasTwoCut;
-    /**
-     * Whether the graph has a 3-cut
-     */
-    private boolean hasThreeCut;
-    /**
-     * Whether the graph is connected
-     */
-    private boolean isConnected;
-    /**
-     * 2-cuts of the graph
-     */
-    private List<List<Edge>> twoCuts;
-    /**
-     * 3-cuts of the graph
-     */
-    private List<List<Edge>> threeCuts;
+    private final List<Edge> edges;
 
     /**
      * Constructor of the CubicGraph class
      */
     public CubicGraph() {
-        this.VERTICES = new ArrayList<>();
-        this.EDGES = new ArrayList<>();
-        LOGGER.finest("New CubicGraph object created");
+        this.vertices = new ArrayList<>();
+        this.edges = new ArrayList<>();
     }
 
     /**
@@ -64,8 +36,7 @@ public class CubicGraph implements Graph {
      */
     @Override
     public int getNumberOfVertices() {
-        LOGGER.finest("Number of Vertices + " + this.VERTICES.size() + " returned");
-        return this.VERTICES.size();
+        return this.vertices.size();
     }
 
     /**
@@ -73,8 +44,7 @@ public class CubicGraph implements Graph {
      */
     @Override
     public List<Vertex> getVertices() {
-        LOGGER.finest("Vertices + " + this.VERTICES + " returned");
-        return this.VERTICES;
+        return this.vertices;
     }
 
     /**
@@ -82,8 +52,7 @@ public class CubicGraph implements Graph {
      */
     @Override
     public List<Edge> getEdges() {
-        LOGGER.finest("Edges + " + this.EDGES + " returned");
-        return this.EDGES;
+        return this.edges;
     }
 
     /**
@@ -93,12 +62,10 @@ public class CubicGraph implements Graph {
      */
     @Override
     public void addVertex(Vertex vertex) throws InconsistentGraphException {
-        if (this.VERTICES.contains(vertex)) {
-            LOGGER.warning("Vertex " + vertex + " already in a graph");
+        if (this.vertices.contains(vertex)) {
             throw new InconsistentGraphException();
         }
-        this.VERTICES.add(vertex);
-        LOGGER.info("Vertex " + vertex + " added");
+        this.vertices.add(vertex);
     }
 
     /**
@@ -108,16 +75,13 @@ public class CubicGraph implements Graph {
      */
     @Override
     public void addEdge(Edge edge) throws InconsistentGraphException {
-        if (!this.VERTICES.contains(edge.getFirst()) || !this.VERTICES.contains(edge.getSecond())) {
-            LOGGER.warning("Vertices of Edge " + edge + " are not in List of vertices of the graph");
+        if (!this.vertices.contains(edge.getFirst()) || !this.vertices.contains(edge.getSecond())) {
             throw new InconsistentGraphException();
         }
-        if (this.EDGES.contains(edge)) {
-            LOGGER.warning("Edge " + edge + " is already in Set of edges");
+        if (this.edges.contains(edge)) {
             throw new InconsistentGraphException();
         }
-        this.EDGES.add(edge);
-        LOGGER.info("Edge " + edge + " added");
+        this.edges.add(edge);
     }
 
     /**
@@ -148,14 +112,23 @@ public class CubicGraph implements Graph {
      * @return Set of all 3-cuts of the graph
      */
     @Override
-    public List<List<Edge>> getAllThreeCuts() {
-        return null;
+    public List<List<Edge>> getAllThreeCuts(ThreeCutFinder threeCutFinder) {
+        return threeCutFinder.getThreeCuts(this);
+    }
+
+    /**
+     * @param circuitsFinder algorithm for finding circuits in the graph
+     * @return List of circuits in the graph
+     */
+    @Override
+    public List<Circuit> getCircuits(CircuitsFinder circuitsFinder) {
+        return circuitsFinder.getCircuits(this);
     }
 
     @Override
     public String toString() {
-        StringBuilder answer = new StringBuilder();
-        for (Vertex vertex : this.VERTICES) {
+        var answer = new StringBuilder();
+        for (Vertex vertex : this.vertices) {
             for (Vertex toPrintVertex : vertex.getNeighbors()) {
                 answer.append(toPrintVertex.getNumber());
                 answer.append(" ");

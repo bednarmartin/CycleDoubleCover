@@ -2,25 +2,19 @@ package main.java.graph;
 
 import main.java.exceptions.InconsistentGraphException;
 
-import java.util.logging.Logger;
-
 /**
  * Class representing an edge of the cubic graph
  */
 
 public class CubicEdge implements Edge {
     /**
-     * Logger of the class
-     */
-    private static final Logger LOGGER = Logger.getLogger(CubicEdge.class.getName());
-    /**
      * The first vertex of the edge
      */
-    private final Vertex FIRST;
+    private final Vertex first;
     /**
      * The second vertex of the edge
      */
-    private final Vertex SECOND;
+    private final Vertex second;
 
     /**
      * Constructor of the class CubicEdge
@@ -30,7 +24,6 @@ public class CubicEdge implements Edge {
      */
     public CubicEdge(Vertex first, Vertex second) throws InconsistentGraphException {
         if (first.equals(second)) {
-            LOGGER.warning("CubicEdge [" + first + " " + second + "] was supposed to be created");
             throw new InconsistentGraphException();
         }
         if (!first.getNeighbors().contains(second)) {
@@ -39,9 +32,8 @@ public class CubicEdge implements Edge {
         if (!second.getNeighbors().contains(first)) {
             second.addNeighbor(first);
         }
-        this.FIRST = first;
-        this.SECOND = second;
-        LOGGER.info("CubicEdge object " + this + " created");
+        this.first = first;
+        this.second = second;
     }
 
     /**
@@ -49,8 +41,7 @@ public class CubicEdge implements Edge {
      */
     @Override
     public Vertex getFirst() {
-        LOGGER.finest("CubicEdge " + this + " -> first vertex " + this.FIRST + " returned");
-        return this.FIRST;
+        return this.first;
     }
 
     /**
@@ -58,18 +49,17 @@ public class CubicEdge implements Edge {
      */
     @Override
     public Vertex getSecond() {
-        LOGGER.finest("CubicEdge " + this + " -> second vertex " + this.SECOND + " returned");
-        return this.SECOND;
+        return this.second;
     }
 
     @Override
     public String toString() {
-        return "[" + this.FIRST + ", " + this.SECOND + "]";
+        return "[" + this.first + ", " + this.second + "]";
     }
 
     @Override
     public int hashCode() {
-        return 20 * this.FIRST.hashCode() + 20 * this.SECOND.hashCode() + 36;
+        return 20 * this.first.hashCode() + 20 * this.second.hashCode() + 36;
     }
 
     @Override
@@ -83,10 +73,10 @@ public class CubicEdge implements Edge {
         if (getClass() != objectToCompare.getClass()) {
             return false;
         }
-        boolean firstIsEqual = ((Edge) objectToCompare).getFirst().getNumber() == this.FIRST.getNumber() ||
-                ((Edge) objectToCompare).getSecond().getNumber() == this.FIRST.getNumber();
-        boolean secondIsEqual = ((Edge) objectToCompare).getFirst().getNumber() == this.SECOND.getNumber() ||
-                ((Edge) objectToCompare).getSecond().getNumber() == this.SECOND.getNumber();
+        boolean firstIsEqual = ((Edge) objectToCompare).getFirst().getNumber() == this.first.getNumber() ||
+                ((Edge) objectToCompare).getSecond().getNumber() == this.first.getNumber();
+        boolean secondIsEqual = ((Edge) objectToCompare).getFirst().getNumber() == this.second.getNumber() ||
+                ((Edge) objectToCompare).getSecond().getNumber() == this.second.getNumber();
         return firstIsEqual && secondIsEqual;
     }
 }

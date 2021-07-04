@@ -8,22 +8,18 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class AdjacentFormatGraphIterator implements GraphIterator {
     /**
-     * Logger of the class
-     */
-    private static final Logger LOGGER = Logger.getLogger(AdjacentFormatGraphIterator.class.getName());
-
-    /**
      * Number of graphs to be read
      */
-    private final int NUMBER_OF_GRAPHS;
+    private final int numberOfGraphs;
     /**
      * Number of vertices of the graphs to be read
      */
-    private final int NUMBER_OF_VERTICES;
+    private final int numberOfVertices;
     /**
      * How many graphs were read
      */
@@ -31,7 +27,7 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
     /**
      * Buffered Reader for reading
      */
-    private final BufferedReader BUFFERED_READER;
+    private final BufferedReader bufferedReader;
 
     /**
      * Constructor of the class AdjacentFormatGraphIterator
@@ -40,21 +36,15 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
      * @throws IOException - wrong format of the graphs
      */
     public AdjacentFormatGraphIterator(String path) throws IOException {
-        this.BUFFERED_READER = new BufferedReader(new FileReader(path));
+        this.bufferedReader = new BufferedReader(new FileReader(path));
         int numberOfLines;
-        try {
-            numberOfLines = (int) Files.lines(Paths.get(path), Charset.defaultCharset()).count();
+        try (Stream<String> stream = Files.lines(Paths.get(path), Charset.defaultCharset())) {
+            numberOfLines = (int) stream.count();
+            this.numberOfVertices = Integer.parseInt(bufferedReader.readLine());
         } catch (Exception e) {
-            LOGGER.severe("PATH: " + path + " - Error during counting number of lines!");
             throw new IOException();
         }
-        try {
-            this.NUMBER_OF_VERTICES = Integer.parseInt(BUFFERED_READER.readLine());
-        } catch (NumberFormatException e) {
-            LOGGER.severe("PATH: " + path + " - Wrong format of the first row of the file!");
-            throw new IOException();
-        }
-        this.NUMBER_OF_GRAPHS = (numberOfLines + 2) / (NUMBER_OF_VERTICES + 1);
+        this.numberOfGraphs = (numberOfLines + 2) / (numberOfVertices + 1);
         this.counter = 0;
     }
 
@@ -71,14 +61,17 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
      */
     @Override
     public Graph next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         Graph graph = new CubicGraph();
         try {
-            for (int i = 0; i < NUMBER_OF_VERTICES; i++) graph.addVertex(new CubicVertex(i));
-            for (int i = 0; i < NUMBER_OF_VERTICES; i++) {
-                String line = BUFFERED_READER.readLine();
+            for (var i = 0; i < numberOfVertices; i++) graph.addVertex(new CubicVertex(i));
+            for (var i = 0; i < numberOfVertices; i++) {
+                String line = bufferedReader.readLine();
                 String[] splitLine = line.split(" ");
                 for (String s : splitLine) {
-                    int toVertex = Integer.parseInt(s);
+                    var toVertex = Integer.parseInt(s);
                     if (i < toVertex) {
                         graph.addEdge(new CubicEdge(graph.getVertices().get(i), graph.getVertices().get(toVertex)));
                     }
@@ -86,13 +79,11 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
             }
             counter++;
             if (hasNext()) {
-                BUFFERED_READER.readLine();
+                bufferedReader.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return graph;
     }
 
@@ -101,7 +92,7 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
      */
     @Override
     public int getNumberOfGraphs() {
-        return NUMBER_OF_GRAPHS;
+        return numberOfGraphs;
     }
 
     /**
@@ -109,6 +100,6 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
      */
     @Override
     public int getNumberOfVertices() {
-        return NUMBER_OF_VERTICES;
+        return numberOfVertices;
     }
 }

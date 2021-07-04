@@ -4,12 +4,8 @@ import main.java.determiners.BridgeDeterminer;
 import main.java.determiners.DFSConnectedGraphDeterminer;
 import main.java.determiners.DFSBridgeDeterminer;
 import main.java.exceptions.InconsistentGraphException;
-import main.java.finders.CombinationTwoCutFinder;
-import main.java.finders.TwoCutFinder;
-import main.java.graph.CubicEdge;
-import main.java.graph.CubicGraph;
-import main.java.graph.CubicVertex;
-import main.java.graph.Graph;
+import main.java.finders.*;
+import main.java.graph.*;
 import main.java.reading.AdjacentFormatGraphIterator;
 import main.java.reading.GraphIterator;
 import org.junit.jupiter.api.Assertions;
@@ -91,18 +87,18 @@ public class CubicGraphTest {
     @DisplayName("Ensure isConnected() method works correctly")
     public void testIsConnected() {
         try {
-            DFSConnectedGraphDeterminer DFSConnectedGraphDeterminer = new DFSConnectedGraphDeterminer();
+            var dfsConnectedGraphDeterminer = new DFSConnectedGraphDeterminer();
 
             GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/8g3e.txt");
 
             while (graphIterator.hasNext()) {
-                Assertions.assertTrue(graphIterator.next().isConnected(DFSConnectedGraphDeterminer));
+                Assertions.assertTrue(graphIterator.next().isConnected(dfsConnectedGraphDeterminer));
             }
 
             GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/disconnected_8.txt");
 
             while (graphIterator2.hasNext()) {
-                Assertions.assertFalse(graphIterator2.next().isConnected(DFSConnectedGraphDeterminer));
+                Assertions.assertFalse(graphIterator2.next().isConnected(dfsConnectedGraphDeterminer));
             }
 
             Graph disconnectedGraph = new CubicGraph();
@@ -115,7 +111,7 @@ public class CubicGraphTest {
             disconnectedGraph.addEdge(new CubicEdge(new CubicVertex(2), new CubicVertex(3)));
             disconnectedGraph.addEdge(new CubicEdge(new CubicVertex(4), new CubicVertex(5)));
 
-            Assertions.assertFalse(disconnectedGraph.isConnected(DFSConnectedGraphDeterminer));
+            Assertions.assertFalse(disconnectedGraph.isConnected(dfsConnectedGraphDeterminer));
 
         } catch (Exception e) {
             Assertions.fail();
@@ -130,14 +126,14 @@ public class CubicGraphTest {
         try {
             GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/bridge_10.txt");
             while (graphIterator.hasNext()) {
-                Graph graph = graphIterator.next();
+                var graph = graphIterator.next();
                 Assertions.assertTrue(graph.hasBridge(bridgeDeterminer));
             }
 
             GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/12g3e.txt");
-            int counter = 0;
+            var counter = 0;
             while (graphIterator2.hasNext()) {
-                Graph graph = graphIterator2.next();
+                var graph = graphIterator2.next();
                 if (counter < 4) {
                     Assertions.assertTrue(graph.hasBridge(bridgeDeterminer));
                 } else {
@@ -159,13 +155,13 @@ public class CubicGraphTest {
         TwoCutFinder twoCutFinder = new CombinationTwoCutFinder(new DFSConnectedGraphDeterminer());
         try {
             GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/8g3e.txt");
-            int counter = 0;
+            var counter = 0;
             while (graphIterator.hasNext()) {
-                Graph graph = graphIterator.next();
+                var graph = graphIterator.next();
                 if (counter == 0) {
-                    Assertions.assertTrue(graph.getAllTwoCuts(twoCutFinder).size() != 0);
+                    Assertions.assertFalse(graph.getAllTwoCuts(twoCutFinder).isEmpty());
                 } else {
-                    Assertions.assertEquals(0, graph.getAllTwoCuts(twoCutFinder).size());
+                    Assertions.assertTrue(graph.getAllTwoCuts(twoCutFinder).isEmpty());
                 }
                 counter++;
             }
@@ -173,14 +169,67 @@ public class CubicGraphTest {
             GraphIterator graphIterator2 = new AdjacentFormatGraphIterator("src/test/resources/10g3e.txt");
             counter = 0;
             while (graphIterator2.hasNext()) {
-                Graph graph = graphIterator2.next();
+                var graph = graphIterator2.next();
                 if (counter < 5) {
-                    Assertions.assertTrue(graph.getAllTwoCuts(twoCutFinder).size() != 0);
+                    Assertions.assertFalse(graph.getAllTwoCuts(twoCutFinder).isEmpty());
                 } else {
                     Assertions.assertEquals(0, graph.getAllTwoCuts(twoCutFinder).size());
                 }
                 counter++;
             }
+        } catch (Exception e) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @DisplayName("Ensure getAllThreeCuts() method works correctly")
+    public void testGetAllThreeCuts() {
+        ThreeCutFinder threeCutFinder = new CombinationThreeCutFinder(new DFSConnectedGraphDeterminer());
+        try {
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/10g3e.txt");
+            var counter = 1;
+            while (graphIterator.hasNext()) {
+                var graph = graphIterator.next();
+                if (counter < 15) {
+                    Assertions.assertFalse(graph.getAllThreeCuts(threeCutFinder).isEmpty());
+                } else {
+                    Assertions.assertTrue(graph.getAllThreeCuts(threeCutFinder).isEmpty());
+                }
+                counter++;
+            }
+        } catch (Exception e) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    @DisplayName("Ensure getCircuits() method works correctly")
+    public void testGetCircuits() {
+        CircuitsFinder circuitsFinder = new DFSCircuitsFinder();
+        try {
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/4g3e.txt");
+            while (graphIterator.hasNext()) {
+                var graph = graphIterator.next();
+                Assertions.assertEquals(7, graph.getCircuits(circuitsFinder).size());
+            }
+        } catch (Exception e) {
+            Assertions.fail();
+        }
+
+        try {
+            GraphIterator graphIterator = new AdjacentFormatGraphIterator("src/test/resources/12g3e.txt");
+            var graph = graphIterator.next();
+            Assertions.assertEquals(19, graph.getCircuits(circuitsFinder).size());
+            while (graphIterator.hasNext()) {
+                graph = graphIterator.next();
+                for (Circuit circuit : graph.getCircuits(circuitsFinder)) {
+                    for (Edge edge : circuit.getEdges()) {
+                        Assertions.assertTrue(graph.getEdges().contains(edge));
+                    }
+                }
+            }
+
         } catch (Exception e) {
             Assertions.fail();
         }
