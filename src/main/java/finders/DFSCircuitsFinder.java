@@ -24,10 +24,10 @@ public class DFSCircuitsFinder implements CircuitsFinder {
     public List<Circuit> getCircuits(Graph graph) {
         allCircuits.clear();
         List<Circuit> circuits = new ArrayList<>();
-        for (var i = 3; i <= graph.getNumberOfVertices(); i++) {
+        for (int i = 3; i <= graph.getNumberOfVertices(); i++) {
             findCircuitsOfLength(i, graph);
         }
-        var counter = 0;
+        int counter = 0;
         for (Set<Edge> edges : allCircuits) {
             circuits.add(new CubicCircuit(new ArrayList<>(edges), ++counter));
         }
@@ -39,8 +39,8 @@ public class DFSCircuitsFinder implements CircuitsFinder {
      * @param graph  graph to be processed
      */
     private void findCircuitsOfLength(int number, Graph graph) {
-        var marked = new boolean[graph.getNumberOfVertices()];
-        for (var i = 0; i < graph.getNumberOfVertices() - (number - 1); i++) {
+        boolean[] marked = new boolean[graph.getNumberOfVertices()];
+        for (int i = 0; i < graph.getNumberOfVertices() - (number - 1); i++) {
             List<Vertex> vertices = new ArrayList<>();
             vertices.add(graph.getVertices().get(i));
             dfs(marked, number - 1, graph.getVertices().get(i), graph.getVertices().get(i), vertices, graph);
@@ -68,7 +68,7 @@ public class DFSCircuitsFinder implements CircuitsFinder {
             return;
 
         }
-        for (var i = 0; i < graph.getNumberOfVertices(); i++) {
+        for (int i = 0; i < graph.getNumberOfVertices(); i++) {
             if (!marked[i] && vertex.getNeighbors().contains(graph.getVertices().get(i))) {
                 List<Vertex> newVertices = new ArrayList<>(vertices);
                 newVertices.add(graph.getVertices().get(i));
@@ -87,7 +87,7 @@ public class DFSCircuitsFinder implements CircuitsFinder {
         vertices.add(start);
         Set<Edge> edges = new HashSet<>();
         try {
-            for (var i = 1; i < vertices.size(); i++) {
+            for (int i = 1; i < vertices.size(); i++) {
                 edges.add(new CubicEdge(vertices.get(i - 1), vertices.get(i)));
             }
             vertices.remove(vertices.size() - 1);

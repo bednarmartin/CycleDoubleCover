@@ -19,15 +19,15 @@ public class DFSBridgeDeterminer implements BridgeDeterminer {
     @Override
     public boolean hasBridge(Graph graph) {
         int numberOfVertices = graph.getNumberOfVertices();
-        var visited = new boolean[numberOfVertices];
-        var distance = new int[numberOfVertices];
-        var low = new int[numberOfVertices];
-        var parent = new Vertex[numberOfVertices];
-        for (var i = 0; i < numberOfVertices; i++) {
+        boolean[] visited = new boolean[numberOfVertices];
+        int[] distance = new int[numberOfVertices];
+        int[] low = new int[numberOfVertices];
+        Vertex[] parent = new Vertex[numberOfVertices];
+        for (int i = 0; i < numberOfVertices; i++) {
             parent[i] = null;
             visited[i] = false;
         }
-        for (var i = 0; i < numberOfVertices; i++) {
+        for (int i = 0; i < numberOfVertices; i++) {
             if (!visited[i] && dfs(graph.getVertices().get(i), visited, distance, low, parent)) {
                 return true;
             }

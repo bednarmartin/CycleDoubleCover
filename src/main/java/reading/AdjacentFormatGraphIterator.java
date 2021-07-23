@@ -66,12 +66,12 @@ public class AdjacentFormatGraphIterator implements GraphIterator {
         }
         Graph graph = new CubicGraph();
         try {
-            for (var i = 0; i < numberOfVertices; i++) graph.addVertex(new CubicVertex(i));
-            for (var i = 0; i < numberOfVertices; i++) {
+            for (int i = 0; i < numberOfVertices; i++) graph.addVertex(new CubicVertex(i));
+            for (int i = 0; i < numberOfVertices; i++) {
                 String line = bufferedReader.readLine();
                 String[] splitLine = line.split(" ");
                 for (String s : splitLine) {
-                    var toVertex = Integer.parseInt(s);
+                    int toVertex = Integer.parseInt(s);
                     if (i < toVertex) {
                         graph.addEdge(new CubicEdge(graph.getVertices().get(i), graph.getVertices().get(toVertex)));
                     }

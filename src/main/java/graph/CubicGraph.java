@@ -127,7 +127,7 @@ public class CubicGraph implements Graph {
 
     @Override
     public String toString() {
-        var answer = new StringBuilder();
+        StringBuilder answer = new StringBuilder();
         for (Vertex vertex : this.vertices) {
             for (Vertex toPrintVertex : vertex.getNeighbors()) {
                 answer.append(toPrintVertex.getNumber());

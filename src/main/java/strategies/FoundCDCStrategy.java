@@ -9,6 +9,18 @@ import main.java.graph.Graph;
  */
 public class FoundCDCStrategy implements CDCStrategy {
     /**
+     * whether the CDC was found
+     */
+    private boolean wasFound;
+
+    /**
+     * Constructor for the FoundCDCStrategy
+     */
+    public FoundCDCStrategy() {
+        this.wasFound = false;
+    }
+
+    /**
      * When CDC is found, the method will throw an exception
      *
      * @param circuitDoubleCover Circuit Double Cover found
@@ -17,6 +29,7 @@ public class FoundCDCStrategy implements CDCStrategy {
      */
     @Override
     public void processCDC(CircuitDoubleCover circuitDoubleCover, Graph graph) throws StopRecursionException {
+        wasFound = true;
         throw new StopRecursionException();
 
     }
@@ -26,6 +39,11 @@ public class FoundCDCStrategy implements CDCStrategy {
      */
     @Override
     public String getResult() {
-        return "STRONG CDC FOUND";
+        if (wasFound) {
+            return "CDC WAS FOUND";
+        } else {
+            return "CDC WAS NOT FOUND";
+        }
+
     }
 }

@@ -49,7 +49,7 @@ public class DisjointCircuitDoubleCoverFinder implements CircuitDoubleCoverFinde
      */
     @Override
     public String getCircuitDoubleCovers() {
-        var pair = new Circuit[2];
+        Circuit[] pair = new Circuit[2];
         try {
             findAllCombinations(pair, 0, circuits.size() - 1, 0, 2);
         } catch (StopRecursionException e) {

@@ -36,8 +36,8 @@ public class CombinationChordFinder implements ChordFinder {
             if (circuit.getEdges().contains(edge)) {
                 continue;
             }
-            var first = false;
-            var second = false;
+            boolean first = false;
+            boolean second = false;
             for (Edge edgeToCheck : circuit.getEdges()) {
                 if (hasFirst(edge, edgeToCheck)) {
                     first = true;

@@ -46,7 +46,7 @@ public class CombinationTwoCutFinder implements TwoCutFinder {
         this.cutEdges = new ArrayList<>();
         this.graph = graph;
         this.graphEdges = new ArrayList<>(graph.getEdges());
-        var array = new Edge[2];
+        Edge[] array = new Edge[2];
         processAllCombinations(array, 0, graphEdges.size() - 1, 0, 2);
         return cutEdges;
     }

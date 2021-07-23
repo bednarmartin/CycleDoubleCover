@@ -45,7 +45,7 @@ public class CombinationThreeCutFinder implements ThreeCutFinder {
         this.cutEdges = new ArrayList<>();
         this.graph = graph;
         this.graphEdges = new ArrayList<>(graph.getEdges());
-        var array = new Edge[3];
+        Edge[] array = new Edge[3];
         processAllCombinations(array, 0, graphEdges.size() - 1, 0, 3);
         return cutEdges;
     }

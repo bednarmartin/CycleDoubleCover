@@ -17,7 +17,7 @@ public class DFSConnectedGraphDeterminer implements ConnectedGraphDeterminer {
     @Override
     public boolean isConnected(Graph graph) {
         List<Boolean> visited = new ArrayList<>();
-        for (var i = 0; i < graph.getNumberOfVertices(); i++) {
+        for (int i = 0; i < graph.getNumberOfVertices(); i++) {
             visited.add(false);
         }
         dfs(graph.getVertices().get(0), visited, graph);
